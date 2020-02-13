@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<extension key="mosaico-smarty" type="module">
+  <file>mosaico_smarty</file>
+  <name>Smarty Templating Engine for Mosaico</name>
+  <description>Enable and use the Smarty templating engine in Mosaico for CiviCRM</description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>Matthew Wire</author>
+    <email>mjw@mjwconsult.co.uk</email>
+  </maintainer>
+  <urls>
+    <url desc="Main Extension Page">https://github.com/mjwconsult/civicrm-mosaico_smarty</url>
+    <url desc="Support">https://www.mjwconsult.co.uk/support</url>
+    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
+  </urls>
+  <releaseDate>2020-02-13</releaseDate>
+  <version>0.1</version>
+  <develStage>alpha</develStage>
+  <compatibility>
+    <ver>5.19</ver>
+  </compatibility>
+  <classloader>
+    <psr4 prefix="Civi\" path="Civi"/>
+  </classloader>
+  <civix>
+    <namespace>CRM/MosaicoSmarty</namespace>
+  </civix>
+  <requires>
+    <ext version="~1.1">org.civicrm.flexmailer</ext>
+    <ext>uk.co.vedaconsulting.mosaico</ext>
+  </requires>
+</extension>
