@@ -19,3 +19,21 @@ See: https://docs.civicrm.org/sysadmin/en/latest/customize/extensions/#installin
 ## Usage
 
 Install and enable.
+
+#### Example of CiviCRM token
+Add the following to a mosaico text block:
+
+```Token: {contact.display_name}```
+
+#### Example of Smarty code
+Add the following to a mosaico text block:
+
+```Smarty:  {if $contact}Welcome {$contact.display_name}{/if}```
+
+## Support and Maintenance
+This extension is supported and maintained with the help and support of the CiviCRM community by:
+
+[![MJW Consulting](docs/images/mjwconsulting.jpg)](https://www.mjwconsult.co.uk)
+
+We offer paid [support and development](https://mjw.pt/support) as well as a [troubleshooting/investigation service](https://mjw.pt/investigation).
+
