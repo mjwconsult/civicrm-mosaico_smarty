@@ -12,16 +12,14 @@ namespace Civi\FlexMailer\Listener;
 
 use Civi\FlexMailer\Event\ComposeBatchEvent;
 use Civi\FlexMailer\Event\RunEvent;
-use Civi\FlexMailer\FlexMailerTask;
 use Civi\Token\TokenProcessor;
-use Civi\Token\TokenRow;
 
 /**
- * Class DefaultComposer
+ * Class SmartyComposer
  * @package Civi\FlexMailer\Listener
  *
- * The DefaultComposer uses a TokenProcessor to generate all messages as
- * a batch.
+ * Based on DefaultComposer and MosaicoComposer. This adds bits needed for
+ *   parsing via Smarty templater
  */
 class SmartyComposer extends DefaultComposer {
 
@@ -79,22 +77,18 @@ class SmartyComposer extends DefaultComposer {
       return;
     }
 
+    $tp->evaluate();
+
     foreach ($tp->getRows() as $row) {
       /** @var \Civi\Token\TokenRow $row */
       /** @var \Civi\FlexMailer\FlexMailerTask $task */
       $task = $row->context['flexMailerTask'];
-
-      // Configure Smarty and the token context with the contact information
-      $smarty = \CRM_Core_Smarty::singleton();
-      $smarty->assign_by_ref('contact', $row->context['contact']);
 
       $task->setMailParams(array_merge(
         $this->createMailParams($e, $task, $row),
         $task->getMailParams()
       ));
     }
-
-    $tp->evaluate();
   }
 
   /**
@@ -108,40 +102,8 @@ class SmartyComposer extends DefaultComposer {
       'controller' => get_class($this),
       'mailing' => $e->getMailing(),
       'mailingId' => $e->getMailing()->id,
-      'smarty' => TRUE,
     ];
     return $context;
-  }
-
-  /**
-   * Create contextual data for a message recipient.
-   *
-   * @param \Civi\FlexMailer\Event\ComposeBatchEvent $e
-   * @param \Civi\FlexMailer\FlexMailerTask $task
-   * @return array
-   *   Contextual data describing the recipient.
-   *   Typical values are `contactId` or `mailingJobId`.
-   */
-  public function createTokenRowContext(
-    ComposeBatchEvent $e,
-    FlexMailerTask $task
-  ) {
-    $contact = \Civi\Api4\Contact::get(FALSE)->addWhere('id', '=', $task->getContactId())->execute()->first();
-    // @fixme: This is required because TokenCompatSubscriber::onRender expects $context['contact']['contact_id'] to exist
-    //   and in API4 it uses ArrayAccess which will error if the offset does not exist.
-    //   See https://github.com/civicrm/civicrm-core/pull/18845
-    $contact['contact_id'] = $contact['id'];
-    return array(
-      'contactId' => $task->getContactId(),
-      'contact' => $contact,
-      'mailingJobId' => $e->getJob()->id,
-      'mailingActionTarget' => array(
-        'id' => $task->getEventQueueId(),
-        'hash' => $task->getHash(),
-        'email' => $task->getAddress(),
-      ),
-      'flexMailerTask' => $task,
-    );
   }
 
   /**

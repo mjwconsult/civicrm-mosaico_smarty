@@ -13,12 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 function mosaico_smarty_civicrm_config(&$config) {
   if (isset(Civi::$statics[__FUNCTION__])) { return; }
   Civi::$statics[__FUNCTION__] = 1;
-
   _mosaico_smarty_civix_civicrm_config($config);
-
-  // Add listeners for CiviCRM hooks that might need altering by other scripts
-  Civi::dispatcher()->addListener('civi.flexmailer.run', 'mosaico_smarty_symfony_civicrm_flexmailer_run');
-  Civi::dispatcher()->addListener('civi.flexmailer.compose', 'mosaico_smarty_symfony_civicrm_flexmailer_compose', \Civi\FlexMailer\FlexMailer::WEIGHT_PREPARE);
 }
 
 /**
@@ -29,6 +24,11 @@ function mosaico_smarty_civicrm_container(ContainerBuilder $container) {
   $container->removeDefinition('mosaico_flexmail_composer');
   $container->setDefinition('civi_flexmailer_default_composer', new Definition('Civi\FlexMailer\Listener\SmartyComposer'))->setPublic(TRUE);
   $container->setDefinition('mosaico_flexmail_composer', new Definition('Civi\FlexMailer\Listener\SmartyComposer'))->setPublic(TRUE);
+
+  $container->setDefinition('civi_token_smarty', new Definition(
+    'Civi\Token\SmartyTokenSubscriber',
+    []
+  ))->addTag('kernel.event_subscriber')->setPublic(TRUE);
 }
 
 /**
