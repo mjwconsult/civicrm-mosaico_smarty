@@ -7,9 +7,9 @@
  * extension.
  */
 class CRM_MosaicoSmarty_ExtensionUtil {
-  const SHORT_NAME = "mosaico_smarty";
-  const LONG_NAME = "mosaico-smarty";
-  const CLASS_PREFIX = "CRM_MosaicoSmarty";
+  const SHORT_NAME = 'mosaico_smarty';
+  const LONG_NAME = 'mosaico-smarty';
+  const CLASS_PREFIX = 'CRM_MosaicoSmarty';
 
   /**
    * Translate a string using the extension's domain.
