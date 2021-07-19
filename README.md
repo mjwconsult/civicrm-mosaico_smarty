@@ -1,3 +1,5 @@
+# Moved to https://lab.civicrm.org/extensions/mosaico_smarty
+
 # mosaico-smarty
 
 Enables the Smarty templating engine in Mosaico and allows you to use smarty tokens/logic for mosaico mailings as well as
